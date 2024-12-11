@@ -8,8 +8,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phone = Get.arguments ??
-        '1234567898'; // Use the passed phone or a default value
+    final phone =
+        Get.arguments ?? ''; // Use the passed phone or a default value
     homeController.fetchData(phone);
 
     return Scaffold(
@@ -34,25 +34,6 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 10),
-              Text(
-                'Phone: ${homeController.phone.value}',
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Uploaded File: ${homeController.uploadedFile.value}',
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Referral Code: ${homeController.referralCode.value}',
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Cashback Amount: ${homeController.cashbackAmount.value}',
-                style: TextStyle(fontSize: 16),
-              ),
             ],
           ),
         );

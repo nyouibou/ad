@@ -65,14 +65,7 @@ class HomeController extends GetxController {
         // Ensure the fields exist and are not null, set fallback value if they are.
         companyName.value = data['company_name']?.toString() ?? 'N/A';
         contactPerson.value = data['contact_person']?.toString() ?? 'N/A';
-        this.phone.value = data['phone']?.toString() ?? 'N/A';
-        uploadedFile.value = data['uploaded_file']?.toString() ?? 'N/A';
-        referralCode.value = data['referral_code']?.toString() ?? 'N/A';
-
         // If cashbackAmount is numeric but might be returned as a string, parse it properly
-        cashbackAmount.value = (data['cashback_amount'] is String)
-            ? (double.tryParse(data['cashback_amount'])?.toString() ?? '0.00')
-            : (data['cashback_amount']?.toString() ?? '0.00');
       } else {
         Get.snackbar('Error', 'Failed to fetch data: ${response.statusCode}');
       }
