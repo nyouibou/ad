@@ -1,43 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'homecontroller.dart';
+import 'usermodel.dart'; // Import the UserModel class
 
 class HomePage extends StatelessWidget {
-  final HomeController homeController = Get.put(HomeController());
-
   @override
   Widget build(BuildContext context) {
-    final phone =
-        Get.arguments ?? ''; // Use the passed phone or a default value
-    homeController.fetchData(phone);
+    // Retrieve the UserModel instance passed from the LoginController
+    final userModel = Get.arguments as UserModel;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Obx(() {
-        if (homeController.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Company Name: ${homeController.companyName.value}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      appBar: AppBar(
+        title: Text('Welcome, ${userModel.contactPerson ?? 'User'}'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'User Details',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              SizedBox(height: 10),
+            ),
+            SizedBox(height: 16),
+            if (userModel.companyName != null)
               Text(
-                'Contact Person: ${homeController.contactPerson.value}',
-                style: TextStyle(fontSize: 16),
+                'Company: ${userModel.companyName}',
+                style: TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 10),
-            ],
-          ),
-        );
-      }),
+            if (userModel.phone != null)
+              Text(
+                'Phone: ${userModel.phone}',
+                style: TextStyle(fontSize: 18),
+              ),
+            if (userModel.cashbackAmount != null)
+              Text(
+                'Cashback: ${userModel.cashbackAmount}',
+                style: TextStyle(fontSize: 18),
+              ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Example: Logout or perform another action
+                Get.offAllNamed('/login'); // Navigate back to login
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

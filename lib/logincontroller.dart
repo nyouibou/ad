@@ -1,11 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'usermodel.dart'; // Import the UserModel class here
 
 class LoginController extends GetxController {
   var isLoading = false.obs;
 
-  final Dio dio = Dio();
   final TextEditingController phoneController = TextEditingController();
 
   Future<void> login() async {
@@ -19,17 +20,23 @@ class LoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      final response = await dio.get(
-        'https://btobapi-production.up.railway.app/api/business_user/$phone',
+      final response = await http.get(
+        Uri.parse(
+          'https://btobapi-production.up.railway.app/api/business_user/$phone',
+        ),
       );
 
       if (response.statusCode == 200) {
-        // Assuming the response contains user details
-        Get.snackbar('Success', 'Login successful');
+        final userModel = UserModel.fromJson(jsonDecode(response.body));
+
+        // Assuming the API returns valid user details
+        Get.snackbar('Success', 'Welcome ${userModel.contactPerson}');
         Get.offNamed('/home',
-            arguments: response.data); // Navigate to home page with user data
-      } else {
+            arguments: userModel); // Pass the UserModel to the home page
+      } else if (response.statusCode == 404) {
         Get.snackbar('Error', 'User not found');
+      } else {
+        Get.snackbar('Error', 'Unexpected error: ${response.reasonPhrase}');
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: ${e.toString()}');
